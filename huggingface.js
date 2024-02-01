@@ -1,12 +1,14 @@
-import { textGenerationStream } from "@huggingface/inference";
+import "dotenv/config";
+import { HfInference } from "@huggingface/inference";
 
-for await (
-  const output of textGenerationStream ({
-    accessToken: "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",
-    model: "HuggingFaceH4/zephyr-7b-beta",
-    inputs: "Hello there!",
-    parameters: { max_length: 100 }
-  })) {
-    
-  if (output.generated_text != null) { console.log(output.generated_text) };
-}
+const hf = new HfInference(process.env.HF_API_KEY);
+
+const output = await hf.conversational({
+  model: "microsoft/DialoGPT-medium",
+  // model: "microsoft/phi-2",
+  inputs: "Heya!",
+});
+
+export const OUTPUT = output.generated_text;
+
+// console.log(output.generated_text);
